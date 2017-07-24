@@ -3,7 +3,7 @@ resolvers += Classpaths.sbtPluginReleases
 val branch = Process("git" :: "rev-parse" :: "--abbrev-ref" :: "HEAD" :: Nil).!!.trim
 val scroogeSbtPluginVersionPrefix = "4.18.0"
 val scroogeSbtPluginVersion =
-  if (branch == "master") scroogeSbtPluginVersionPrefix
+  if (branch == "master" || branch == "metaide") scroogeSbtPluginVersionPrefix
   else scroogeSbtPluginVersionPrefix + "-SNAPSHOT"
 addSbtPlugin("com.twitter" % "scrooge-sbt-plugin" % scroogeSbtPluginVersion)
 

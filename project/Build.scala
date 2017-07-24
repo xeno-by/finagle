@@ -11,7 +11,7 @@ import scoverage.ScoverageKeys
 
 object Finagle extends Build {
   val branch = Process("git" :: "rev-parse" :: "--abbrev-ref" :: "HEAD" :: Nil).!!.trim
-  val suffix = if (branch == "master") "" else "-SNAPSHOT"
+  val suffix = if (branch == "master" || branch == "metaide") "" else "-SNAPSHOT"
 
   val libVersion = "6.45.0" + suffix
   val utilVersion = "6.45.0" + suffix
@@ -60,8 +60,8 @@ object Finagle extends Build {
   val sharedSettings = Seq(
     version := libVersion,
     organization := "com.twitter",
-    scalaVersion := "2.12.1",
-    crossScalaVersions := Seq("2.11.11", "2.12.1"),
+    scalaVersion := "2.12.2",
+    crossScalaVersions := Seq("2.11.11", "2.12.2"),
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
       "org.scalatest" %% "scalatest" % "3.0.0" % "test",
@@ -93,6 +93,10 @@ object Finagle extends Build {
     ),
     javacOptions ++= Seq("-Xlint:unchecked", "-source", "1.8", "-target", "1.8"),
     javacOptions in doc := Seq("-source", "1.8"),
+
+    // Support for semanticdb
+    addCompilerPlugin("org.scalameta" % "scalahost" % "2.0.0-M1" cross CrossVersion.full),
+    scalacOptions += "-Yrangepos",
 
     // This is bad news for things like com.twitter.util.Time
     parallelExecution in Test := false,
